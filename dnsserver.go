@@ -49,7 +49,7 @@ func (ds *DNSServer) Listen(listenSpec string) error {
 
 // Convenience function to ensure the fqdn is well-formed, and keeps the
 // set/delete interface easy.
-func (ds *DNSServer) composeHost(host string) string {
+func (ds *DNSServer) qualifyHost(host string) string {
 	return host + "." + ds.Domain
 }
 
@@ -83,14 +83,14 @@ func (ds *DNSServer) GetA(fqdn string) *dns.A {
 // Sets a host to an IP. Note that this is not the FQDN, but a hostname.
 func (ds *DNSServer) SetA(host string, ip net.IP) {
 	ds.aMutex.Lock()
-	ds.aRecords[ds.composeHost(host)] = ip
+	ds.aRecords[ds.qualifyHost(host)] = ip
 	ds.aMutex.Unlock()
 }
 
 // Deletes a host. Note that this is not the FQDN, but a hostname.
 func (ds *DNSServer) DeleteA(host string) {
 	ds.aMutex.Lock()
-	delete(ds.aRecords, ds.composeHost(host))
+	delete(ds.aRecords, ds.qualifyHost(host))
 	ds.aMutex.Unlock()
 }
 
