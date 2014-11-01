@@ -11,12 +11,12 @@ import (
 // Encapsulates the data segment of a SRV record. Priority and Weight are
 // always 0 in our SRV records.
 type SRVRecord struct {
-	port uint16
-	host string
+	Port uint16
+	Host string
 }
 
 func (s SRVRecord) Equal(s2 SRVRecord) bool {
-	return s.port == s2.port && s.host == s2.host
+	return s.Port == s2.Port && s.Host == s2.Host
 }
 
 // Struct which describes the DNS server.
@@ -115,8 +115,8 @@ func (ds *DNSServer) GetSRV(spec string) []*dns.SRV {
 				},
 				Priority: 0,
 				Weight:   0,
-				Port:     record.port,
-				Target:   record.host,
+				Port:     record.Port,
+				Target:   record.Host,
 			}
 
 			records = append(records, srvRecord)
