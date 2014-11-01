@@ -91,8 +91,8 @@ func TestARecordCRUD(t *testing.T) {
 
 func TestSRVRecordCRUD(t *testing.T) {
 	table := map[string][]SRVRecord{
-		"test":  {{80, "test.docker."}},
-		"test2": {{81, "test2.docker."}},
+		"test":  {{80, "test"}},
+		"test2": {{81, "test2"}},
 	}
 
 	// do this in independent parts so both records exist. This tests some
@@ -132,8 +132,7 @@ func TestSRVRecordCRUD(t *testing.T) {
 			t.Fatal("Defaults for priority and weight do not equal 0")
 		}
 
-		result := SRVRecord{srvRecord.Port, srvRecord.Target}
-		if !result.Equal(srv[0]) {
+		if srvRecord.Port != srv[0].Port || srvRecord.Target != fmt.Sprintf("%s.docker.", name) {
 			t.Fatalf("SRV records are not equivalent: received host %q port %d", srvRecord.Target, srvRecord.Port)
 		}
 	}
