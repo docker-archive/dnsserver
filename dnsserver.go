@@ -184,11 +184,11 @@ func (ds *DNSServer) ServeDNS(w dns.ResponseWriter, r *dns.Msg) {
 		}
 	}
 
-	// If we have no responses, that means we found nothing. Send NXDOMAIN so we
-	// can instruct the resolver to consult /etc/resolv.conf for the next host to
-	// query.
+	// If we have no answers, that means we found nothing or didn't get a query
+	// we can reply to. Reply with no answers so we ensure the query moves on to
+	// the next server.
 	if len(answers) == 0 {
-		m.SetRcode(r, dns.RcodeNameError)
+		m.SetRcode(r, dns.RcodeSuccess)
 		w.WriteMsg(m)
 		return
 	}
