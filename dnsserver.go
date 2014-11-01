@@ -58,6 +58,20 @@ func (ds *DNSServer) qualifySrv(service, protocol string) string {
 	return fmt.Sprintf("_%s._%s.%s", service, protocol, ds.Domain)
 }
 
+// rewrites supplied host entries to use the domain this dns server manages
+func (ds *DNSServer) qualifySrvHosts(srvs []SRVRecord) []SRVRecord {
+	newsrvs := []SRVRecord{}
+
+	for _, srv := range srvs {
+		newsrvs = append(newsrvs, SRVRecord{
+			Host: ds.qualifyHost(srv.Host),
+			Port: srv.Port,
+		})
+	}
+
+	return newsrvs
+}
+
 // Receives a FQDN; looks up and supplies the A record.
 func (ds *DNSServer) GetA(fqdn string) *dns.A {
 	ds.aMutex.RLock()
@@ -132,7 +146,7 @@ func (ds *DNSServer) GetSRV(spec string) []*dns.SRV {
 // on what that requires.
 func (ds *DNSServer) SetSRV(service, protocol string, srvs []SRVRecord) {
 	ds.srvMutex.Lock()
-	ds.srvRecords[ds.qualifySrv(service, protocol)] = srvs
+	ds.srvRecords[ds.qualifySrv(service, protocol)] = ds.qualifySrvHosts(srvs)
 	ds.srvMutex.Unlock()
 }
 
