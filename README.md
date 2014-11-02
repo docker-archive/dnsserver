@@ -4,6 +4,11 @@ This provides a very basic API for programming a DNS service that serves over
 UDP. Single A (non-RR) records and SRV records are currently supported,
 although this may change in the future.
 
+## Stability
+
+This should be considered alpha quality software and is currently not suitable
+for production use.
+
 ## Documentation
 
 You can find comprehensive documentation in the source comments or at the URL below:
